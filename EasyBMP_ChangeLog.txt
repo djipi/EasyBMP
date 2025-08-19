@@ -724,3 +724,54 @@ Version: 1.03
    the code sample.
    
 *--------------------------------------------------------------------*
+
+Version: 1.04
+   Date: 07-22-2006
+
+   Removed the assignment to the integer i in IntPow() to eliminate a 
+   Borland compiler warning.    
+
+   Removed the assignment to the integer i in the Read##bitRow() 
+   functions to eliminate Borland compiler warnings.
+   
+   Removed the assignment to ZeroWORD in line 478 of EasyBMP.cpp in 
+   BMP::WriteToFile() to eliminate Borland compiler warnings.
+   
+   Removed the assignment to ZeroWORD in line 825 of EasyBMP.cpp in 
+   BMP::ReadFromFile() to eliminate Borland compiler warnings.   
+   
+   The Borland warnings about conditions always being false are 
+   incorrect. (Lines 1587, 1594, and 1601.) Likewise, the Borland 
+   warnings about unreachable code (lines 1589, 1596, and 1603) are 
+   incorrect. This code serves as a protection on unexpected hardware 
+   where the data types may not be of the correct size, and helps to 
+   future-proof EasyBMP. The first time this type of error was 
+   encountered was on 64-bit CPUs, where the size of the DWORD was 
+   larger than assumed when writing EasyBMP. Therefore, we will not 
+   "correct" these "errors" detected by Borland. If they bother you, 
+   compile with the -w-8008 and -w-8066 options.
+   
+   Borland issues warnings about argc and argv being unused in the 
+   sample project. These are silly warnings and will be ignored. If 
+   this warning bothers you, compile with the -w-8057 option.
+   
+   Modified the sample makefile so that EasyBMP.o depends upon 
+   EasyBMP.cpp and EasyBMP*.h in the current working directory, rather
+   than the parent directory.
+   
+   Added a global EasyBMPwarnings boolean variable, and functions 
+   SetEasyBMPwarningsOn() and SetEasyBMPwarningsOff() to enable and 
+   disable EasyBMP warnings and errors. Note that this will not 
+   disable error checking or any other EasyBMP behavior, other than 
+   cout output of the warning and error messages.
+   
+   Added the function GetEasyBMPwarningState() to query the EasyBMP 
+   warning state. (Either warnings are enabled or disabled.)
+
+   Removed old commented code (Write1bitRow()) from EasyBMP.cpp. 
+
+   Replaced the 24-bit EasyBMPbackground.bmp image in the code sample 
+   with a dithered 8-bit version to reduce the download size of the 
+   core library.
+    
+*--------------------------------------------------------------------*

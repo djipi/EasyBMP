@@ -8,8 +8,8 @@
 *                                                *
 *          file: EasyBMP_DataStructures.h        *
 *    date added: 05-02-2005                      *
-* date modified: 06-20-2006                      *
-*       version: 1.03                            *
+* date modified: 07-22-2006                      *
+*       version: 1.04                            *
 *                                                *
 *   License: BSD (revised/modified)              *
 * Copyright: 2005-6 by the EasyBMP Project       * 
