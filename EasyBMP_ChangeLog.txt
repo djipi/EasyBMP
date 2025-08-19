@@ -801,4 +801,21 @@ Version: 1.05
 		                                          // box
    All rescaling is done with bilinear interpolation. 
 
- *--------------------------------------------------------------------*
+*--------------------------------------------------------------------*
+
+Version: 1.06
+   Date: 12-01-2006
+
+   Added includes for <cctype> and <cstring> to EasyBMP.h. These are
+   used and should have been included all along. This should help 
+   with Intel icc compiling. 
+   
+   Fixed the && bug in the copy constructor. (Thank you to user 
+   fcnature!)
+   
+   Added image scaling to the supplied code sample.
+   
+   Added GetPixle() and SetPixel() functions for future use. These 
+   will be added to enable more careful use of the const keyword.
+   
+*--------------------------------------------------------------------*

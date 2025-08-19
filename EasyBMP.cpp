@@ -8,8 +8,8 @@
 *                                                *
 *          file: EasyBMP.cpp                     * 
 *    date added: 03-31-2006                      *
-* date modified: 11-01-2006                      *
-*       version: 1.05                            *
+* date modified: 12-01-2006                      *
+*       version: 1.06                            *
 *                                                *
 *   License: BSD (revised/modified)              *
 * Copyright: 2005-6 by the EasyBMP Project       * 
@@ -113,6 +113,34 @@ void BMFH::display( void )
 
 /* These functions are defined in EasyBMP_BMP.h */
 
+RGBApixel BMP::GetPixel( int i, int j ) const
+{
+ using namespace std;
+ bool Warn = false;
+ if( i >= Width )
+ { i = Width-1; Warn = true; }
+ if( i < 0 )
+ { i = 0; Warn = true; }
+ if( j >= Height )
+ { j = Height-1; Warn = true; }
+ if( j < 0 )
+ { j = 0; Warn = true; }
+ if( Warn && EasyBMPwarnings )
+ {
+  cout << "EasyBMP Warning: Attempted to access non-existent pixel;" << endl
+       << "                 Truncating request to fit in the range [0,"
+       << Width-1 << "] x [0," << Height-1 << "]." << endl;
+ }	
+ return Pixels[i][j];
+}
+
+bool BMP::SetPixel( int i, int j, RGBApixel NewPixel )
+{
+ Pixels[i][j] = NewPixel;
+ return true;
+}
+
+
 bool BMP::SetColor( int ColorNumber , RGBApixel NewColor )
 {
  using namespace std;
@@ -149,6 +177,7 @@ bool BMP::SetColor( int ColorNumber , RGBApixel NewColor )
  return true;
 }
 
+// RGBApixel BMP::GetColor( int ColorNumber ) const
 RGBApixel BMP::GetColor( int ColorNumber )
 { 
  RGBApixel Output;
@@ -209,6 +238,7 @@ BMP::BMP()
  SizeOfMetaData2 = 0;
 }
 
+// BMP::BMP( const BMP& Input )
 BMP::BMP( BMP& Input )
 {
  // first, make the image empty.
@@ -241,7 +271,7 @@ BMP::BMP( BMP& Input )
  
  // if there is a color table, get all the colors
 
- if( BitDepth == 1 || BitDepth == 4 && 
+ if( BitDepth == 1 || BitDepth == 4 ||  
      BitDepth == 8 )
  {
   for( int k=0 ; k < TellNumberOfColors() ; k++ )
@@ -257,6 +287,7 @@ BMP::BMP( BMP& Input )
   for( int i=0; i < Width ; i++ )
   {
    Pixels[i][j] = *Input(i,j);
+//   Pixels[i][j] = Input.GetPixel(i,j); // *Input(i,j);
   }
  }
 }
@@ -297,15 +328,19 @@ RGBApixel* BMP::operator()(int i, int j)
  return &(Pixels[i][j]);
 }
 
+// int BMP::TellBitDepth( void ) const
 int BMP::TellBitDepth( void )
 { return BitDepth; }
 
+// int BMP::TellHeight( void ) const
 int BMP::TellHeight( void )
 { return Height; }
 
+// int BMP::TellWidth( void ) const
 int BMP::TellWidth( void )
 { return Width; }
 
+// int BMP::TellNumberOfColors( void ) const
 int BMP::TellNumberOfColors( void )
 {
  int output = IntPow( 2, BitDepth );
@@ -1238,12 +1273,15 @@ void BMP::SetDPI( int HorizontalDPI, int VerticalDPI )
  YPelsPerMeter = (int) (   VerticalDPI * 39.37007874015748 );
 }
 
+// int BMP::TellVerticalDPI( void ) const
 int BMP::TellVerticalDPI( void )
 {
  if( !YPelsPerMeter )
  { YPelsPerMeter = DefaultYPelsPerMeter; }
  return (int) ( YPelsPerMeter / (double) 39.37007874015748 ); 
 }
+
+// int BMP::TellHorizontalDPI( void ) const
 int BMP::TellHorizontalDPI( void )
 {
  if( !XPelsPerMeter )

@@ -8,8 +8,8 @@
 *                                                *
 *          file: EasyBMP.h                       * 
 *    date added: 01-31-2005                      *
-* date modified: 11-01-2006                      *
-*       version: 1.05                            *
+* date modified: 12-01-2006                      *
+*       version: 1.06                            *
 *                                                *
 *   License: BSD (revised/modified)              *
 * Copyright: 2005-6 by the EasyBMP Project       * 
@@ -29,6 +29,8 @@
 
 #include <iostream>
 #include <cmath>
+#include <cctype>
+#include <cstring>
 
 #ifndef EasyBMP
 #define EasyBMP
@@ -68,9 +70,9 @@
 #include "EasyBMP_VariousBMPutilities.h"
 
 #ifndef _EasyBMP_Version_
-#define _EasyBMP_Version_ 1.05
-#define _EasyBMP_Version_Integer_ 105
-#define _EasyBMP_Version_String_ "1.05"
+#define _EasyBMP_Version_ 1.06
+#define _EasyBMP_Version_Integer_ 106
+#define _EasyBMP_Version_String_ "1.06"
 #endif
 
 #ifndef _EasyBMPwarnings_

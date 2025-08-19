@@ -6,8 +6,8 @@
 # support: http://easybmp.sourceforge.net        
 #          file: makefile                
 #    date added: 04-22-2006                      
-# date modified: 07-22-2006                      
-#       version: 1.04                            
+# date modified: 12-01-2006                      
+#       version: 1.06                            
 #                                                
 #   License: BSD (revised/modified)              
 # Copyright: 2005-6 by the EasyBMP Project        

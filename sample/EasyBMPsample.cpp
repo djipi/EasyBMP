@@ -8,8 +8,8 @@
 *                                                *
 *          file: EasyBMPsample.cpp               * 
 *    date added: 03-31-2006                      *
-* date modified: 07-22-2006                      *
-*       version: 1.04                            *
+* date modified: 12-01-2006                      *
+*       version: 1.06                            *
 *                                                *
 *   License: BSD (revised/modified)              *
 * Copyright: 2005-6 by the EasyBMP Project       * 
@@ -72,6 +72,11 @@ int main( int argc, char* argv[] )
  Output.SetBitDepth( 1 );
  cout << "writing 1bpp ... " << endl;					
  Output.WriteToFile( "EasyBMPoutput1bpp.bmp" );
+ 
+ Output.SetBitDepth( 24 );
+ Rescale( Output, 'p' , 50 );
+ cout << "writing 24bpp scaled image ..." << endl;
+ Output.WriteToFile( "EasyBMPoutput24bpp_rescaled.bmp" );
 
  return 0;
 }

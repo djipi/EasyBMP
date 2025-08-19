@@ -8,8 +8,8 @@
 *                                                *
 *          file: EasyBMP_VariousBMPutilities.h   *
 *    date added: 05-02-2005                      *
-* date modified: 11-01-2006                      *
-*       version: 1.05                            *
+* date modified: 12-01-2006                      *
+*       version: 1.06                            *
 *                                                *
 *   License: BSD (revised/modified)              *
 * Copyright: 2005-6 by the EasyBMP Project       * 
