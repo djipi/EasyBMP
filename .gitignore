@@ -1,7 +1,4 @@
-*.o
 *.user
-*.a
 .vs/
 x64/
 Win32/
-[Bb]uild/
