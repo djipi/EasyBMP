@@ -2,3 +2,4 @@ EasyBMP*.cpp
 EasyBMP*.h
 EasyBMPoutput*.*
 *.exe
+*.o
