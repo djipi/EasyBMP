@@ -1,6 +1,7 @@
 *.o
 *.user
 *.a
-.vs
+.vs/
 x64/
 Win32/
+[Bb]uild/
