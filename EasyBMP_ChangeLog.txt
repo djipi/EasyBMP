@@ -775,3 +775,30 @@ Version: 1.04
    core library.
     
 *--------------------------------------------------------------------*
+
+Version: 1.05
+   Date: 11-01-2006
+
+   Renamed BytesRead to ItemsRead in the SafeFread() function in 
+   EasyBMP.cpp for greater clarity.
+   
+   Added a copy constructor to the BMP class. However, note that 
+   passing by value is not recommended practice. (Passing by refer-
+   ence is much faster, and consumes less memory.) 
+   
+   Added a new function: 
+       bool Rescale( BMP& InputImage, char mode, int NewDimension );
+   to resize an image. The mode variables are as follows:
+    'P': resizes the image to a new percentage of the old size, 
+	     e.g., 42%, 13%, etc. 
+         example: Rescale( SomeImage, 'p', 42 );
+    'W': resizes the image such that the new width is as specified. 
+         example: Rescale( SomeImage, 'W', 100 );
+    'H': resizes the image such that the new height is as specified. 
+         example: Rescale( SomeImage, 'H', 100 );
+    'F': resizes the image to fit in a square of specified size. 
+         example: Rescale( SomeImage, 'F', 100 ); // fits in 100x100
+		                                          // box
+   All rescaling is done with bilinear interpolation. 
+
+ *--------------------------------------------------------------------*

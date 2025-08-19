@@ -8,8 +8,8 @@
 *                                                *
 *          file: EasyBMP.cpp                     * 
 *    date added: 03-31-2006                      *
-* date modified: 07-22-2006                      *
-*       version: 1.04                            *
+* date modified: 11-01-2006                      *
+*       version: 1.05                            *
 *                                                *
 *   License: BSD (revised/modified)              *
 * Copyright: 2005-6 by the EasyBMP Project       * 
@@ -207,6 +207,58 @@ BMP::BMP()
  SizeOfMetaData1 = 0;
  MetaData2 = NULL;
  SizeOfMetaData2 = 0;
+}
+
+BMP::BMP( BMP& Input )
+{
+ // first, make the image empty.
+
+ Width = 1;
+ Height = 1;
+ BitDepth = 24;
+ Pixels = new RGBApixel* [Width];
+ Pixels[0] = new RGBApixel [Height];
+ Colors = NULL; 
+ XPelsPerMeter = 0;
+ YPelsPerMeter = 0;
+ 
+ MetaData1 = NULL;
+ SizeOfMetaData1 = 0;
+ MetaData2 = NULL;
+ SizeOfMetaData2 = 0;
+
+ // now, set the correct bit depth
+ 
+ SetBitDepth( Input.TellBitDepth() );
+ 
+ // set the correct pixel size 
+ 
+ SetSize( Input.TellWidth() , Input.TellHeight() );
+
+ // set the DPI information from Input
+ 
+ SetDPI( Input.TellHorizontalDPI() , Input.TellVerticalDPI() );
+ 
+ // if there is a color table, get all the colors
+
+ if( BitDepth == 1 || BitDepth == 4 && 
+     BitDepth == 8 )
+ {
+  for( int k=0 ; k < TellNumberOfColors() ; k++ )
+  {
+   SetColor( k, Input.GetColor( k )); 
+  }
+ }
+ 
+ // get all the pixels 
+ 
+ for( int j=0; j < Height ; j++ )
+ {
+  for( int i=0; i < Width ; i++ )
+  {
+   Pixels[i][j] = *Input(i,j);
+  }
+ }
 }
 
 BMP::~BMP()
@@ -1171,11 +1223,11 @@ bool BMP::CreateStandardColorTable( void )
 bool SafeFread( char* buffer, int size, int number, FILE* fp )
 {
  using namespace std;
- int BytesRead;
+ int ItemsRead;
  if( feof(fp) )
  { return false; }
- BytesRead = (int) fread( buffer , size , number , fp );
- if( BytesRead < number )
+ ItemsRead = (int) fread( buffer , size , number , fp );
+ if( ItemsRead < number )
  { return false; }
  return true;
 }
@@ -1686,4 +1738,130 @@ bool EasyBMPcheckDataSize( void )
   ReturnValue = false;
  }
  return ReturnValue;
+}
+
+bool Rescale( BMP& InputImage , char mode, int NewDimension )
+{
+ using namespace std;
+ int CapMode = toupper( mode );
+
+ BMP OldImage( InputImage );
+ 
+ if( CapMode != 'P' &&
+     CapMode != 'W' &&
+     CapMode != 'H' && 
+     CapMode != 'F' )
+ {
+  if( EasyBMPwarnings )
+  {
+   char ErrorMessage [1024];
+   sprintf( ErrorMessage, "EasyBMP Error: Unknown rescale mode %c requested\n" , mode );
+   cout << ErrorMessage; 
+  }
+  return false;
+ }
+
+ int NewWidth  =0;
+ int NewHeight =0;
+ 
+ int OldWidth = OldImage.TellWidth();
+ int OldHeight= OldImage.TellHeight();
+ 
+ if( CapMode == 'P' )
+ {
+  NewWidth = (int) floor( OldWidth * NewDimension / 100.0 );
+  NewHeight = (int) floor( OldHeight * NewDimension / 100.0 );
+ }
+ if( CapMode == 'F' )
+ {
+  if( OldWidth > OldHeight )
+  { CapMode = 'W'; }
+  else
+  { CapMode = 'H'; }
+ }
+
+ if( CapMode == 'W' )
+ {
+  double percent = (double) NewDimension / (double) OldWidth;
+  NewWidth = NewDimension;
+  NewHeight = (int) floor( OldHeight * percent );
+ }
+ if( CapMode == 'H' )
+ {
+  double percent = (double) NewDimension / (double) OldHeight;
+  NewHeight = NewDimension;
+  NewWidth = (int) floor( OldWidth * percent );
+ }
+ 
+ if( NewWidth < 1 )
+ { NewWidth = 1; }
+ if( NewHeight < 1 )
+ { NewHeight = 1; }
+ 
+ InputImage.SetSize( NewWidth, NewHeight );
+ InputImage.SetBitDepth( 24 );
+
+ int I,J;
+ double ThetaI,ThetaJ;
+ 
+ for( int j=0; j < NewHeight-1 ; j++ )
+ {
+  ThetaJ = (double)(j*(OldHeight-1.0))
+          /(double)(NewHeight-1.0);
+  J	= (int) floor( ThetaJ );
+  ThetaJ -= J;  
+  
+  for( int i=0; i < NewWidth-1 ; i++ )
+  {
+   ThetaI = (double)(i*(OldWidth-1.0))
+           /(double)(NewWidth-1.0);
+   I = (int) floor( ThetaI );
+   ThetaI -= I;  
+   
+   InputImage(i,j)->Red = (ebmpBYTE) 
+                          ( (1.0-ThetaI-ThetaJ+ThetaI*ThetaJ)*(OldImage(I,J)->Red)
+                           +(ThetaI-ThetaI*ThetaJ)*(OldImage(I+1,J)->Red)   
+                           +(ThetaJ-ThetaI*ThetaJ)*(OldImage(I,J+1)->Red)   
+                           +(ThetaI*ThetaJ)*(OldImage(I+1,J+1)->Red) );
+   InputImage(i,j)->Green = (ebmpBYTE) 
+                          ( (1.0-ThetaI-ThetaJ+ThetaI*ThetaJ)*OldImage(I,J)->Green
+                           +(ThetaI-ThetaI*ThetaJ)*OldImage(I+1,J)->Green   
+                           +(ThetaJ-ThetaI*ThetaJ)*OldImage(I,J+1)->Green   
+                           +(ThetaI*ThetaJ)*OldImage(I+1,J+1)->Green );  
+   InputImage(i,j)->Blue = (ebmpBYTE) 
+                          ( (1.0-ThetaI-ThetaJ+ThetaI*ThetaJ)*OldImage(I,J)->Blue
+                           +(ThetaI-ThetaI*ThetaJ)*OldImage(I+1,J)->Blue   
+                           +(ThetaJ-ThetaI*ThetaJ)*OldImage(I,J+1)->Blue   
+                           +(ThetaI*ThetaJ)*OldImage(I+1,J+1)->Blue ); 
+  }
+   InputImage(NewWidth-1,j)->Red = (ebmpBYTE) 
+                            ( (1.0-ThetaJ)*(OldImage(OldWidth-1,J)->Red)
+                          + ThetaJ*(OldImage(OldWidth-1,J+1)->Red) ); 
+   InputImage(NewWidth-1,j)->Green = (ebmpBYTE) 
+                            ( (1.0-ThetaJ)*(OldImage(OldWidth-1,J)->Green)
+                          + ThetaJ*(OldImage(OldWidth-1,J+1)->Green) ); 
+   InputImage(NewWidth-1,j)->Blue = (ebmpBYTE) 
+                            ( (1.0-ThetaJ)*(OldImage(OldWidth-1,J)->Blue)
+                          + ThetaJ*(OldImage(OldWidth-1,J+1)->Blue) ); 
+ } 
+
+ for( int i=0 ; i < NewWidth-1 ; i++ )
+ {
+  ThetaI = (double)(i*(OldWidth-1.0))
+          /(double)(NewWidth-1.0);
+  I = (int) floor( ThetaI );
+  ThetaI -= I;  
+  InputImage(i,NewHeight-1)->Red = (ebmpBYTE) 
+                            ( (1.0-ThetaI)*(OldImage(I,OldHeight-1)->Red)
+                          + ThetaI*(OldImage(I,OldHeight-1)->Red) ); 
+  InputImage(i,NewHeight-1)->Green = (ebmpBYTE) 
+                            ( (1.0-ThetaI)*(OldImage(I,OldHeight-1)->Green)
+                          + ThetaI*(OldImage(I,OldHeight-1)->Green) ); 
+  InputImage(i,NewHeight-1)->Blue = (ebmpBYTE) 
+                            ( (1.0-ThetaI)*(OldImage(I,OldHeight-1)->Blue)
+                          + ThetaI*(OldImage(I,OldHeight-1)->Blue) ); 
+ }
+ 
+ *InputImage(NewWidth-1,NewHeight-1) = *OldImage(OldWidth-1,OldHeight-1);
+ return true;
 }
