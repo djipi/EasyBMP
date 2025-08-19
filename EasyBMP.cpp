@@ -8,8 +8,8 @@
 *                                                *
 *          file: EasyBMP.cpp                     * 
 *    date added: 03-31-2006                      *
-* date modified: 05-29-2006                      *
-*       version: 1.02                            *
+* date modified: 06-20-2006                      *
+*       version: 1.03                            *
 *                                                *
 *   License: BSD (revised/modified)              *
 * Copyright: 2005-6 by the EasyBMP Project       * 
@@ -111,6 +111,12 @@ bool BMP::SetColor( int ColorNumber , RGBApixel NewColor )
        << "                 that lacks a color table. Ignoring request." << endl;
   return false;
  }
+ if( !Colors )
+ {
+  cout << "EasyBMP Warning: Attempted to set a color, but the color table" << endl
+       << "                 is not defined. Ignoring request." << endl;
+  return false; 
+ }
  if( ColorNumber >= TellNumberOfColors() )
  {
   cout << "EasyBMP Warning: Requested color number " 
@@ -137,6 +143,12 @@ RGBApixel BMP::GetColor( int ColorNumber )
   cout << "EasyBMP Warning: Attempted to access color table for a BMP object" << endl
        << "                 that lacks a color table. Ignoring request." << endl;
   return Output;
+ }
+ if( !Colors )
+ {
+  cout << "EasyBMP Warning: Requested a color, but the color table" << endl
+       << "                 is not defined. Ignoring request." << endl;
+  return Output; 
  }
  if( ColorNumber >= TellNumberOfColors() )
  {
@@ -411,7 +423,7 @@ bool BMP::WriteToFile( const char* FileName )
  
  // write the pixels 
  int i,j;
- if( BitDepth == 24 || BitDepth == 32 ||  BitDepth == 8 || BitDepth == 4 || BitDepth == 1)
+ if( BitDepth != 16 )
  {  
   ebmpBYTE* Buffer;
   int BufferSize = (int) ( (Width*BitDepth)/8.0 );
@@ -516,277 +528,6 @@ bool BMP::WriteToFile( const char* FileName )
    }
   }
   
- }
- 
- if( BitDepth == 4 && 1 == 0 )
- {
-  int DataBytes = (int) ceil( Width / 2.0 );
-  int PaddingBytes = ( 4 - DataBytes % 4 ) % 4;
- 
-  for( j = Height-1 ; j >= 0 ; j-- )
-  {
-   // write all row pixel data
-   i=0;
-   int WriteNumber = 0;
-   while( WriteNumber < DataBytes )
-   {
-    int Index1 = 0;
-    int Index2 = 0;
-    
-    int k;
-    int BestDistance;	
-    if( i < Width )
-    {
-     k=0;
-     BestDistance = 999999;	
-     // choose a best index.
-     while( k < 16 )
-     {
-      int TempDistance = IntSquare( (int) Pixels[i][j].Red - (int) Colors[k].Red )
-                       + IntSquare( (int) Pixels[i][j].Green - (int) Colors[k].Green )
-                       + IntSquare( (int) Pixels[i][j].Blue - (int) Colors[k].Blue );
-      if( TempDistance < BestDistance )
-      {
-       BestDistance = TempDistance;
-       Index1 = k;
-      }	  
-      k++;
-     }
-     i++;	
-    }
-    
-    if( i < Width )
-    {
-     k=0;
-     BestDistance = 999999;	
-     // choose a best index.
-     while( k < 16 )
-     {
-      int TempDistance = IntSquare( (int) Pixels[i][j].Red - (int) Colors[k].Red )
-                       + IntSquare( (int) Pixels[i][j].Green - (int) Colors[k].Green )
-                       + IntSquare( (int) Pixels[i][j].Blue - (int) Colors[k].Blue );
-      if( TempDistance < BestDistance )
-      {
-       BestDistance = TempDistance;
-       Index2 = k;
-      }	  
-      k++;
-     }
-     i++;	
-    }
-    
-    ebmpBYTE RawBYTE = (ebmpBYTE) (Index2 + Index1*16);
-    fwrite( (char*) &RawBYTE , 1, 1, fp);
-    WriteNumber++;
-   }
-   // read any necessary row padding
-   WriteNumber = 0;
-   while( WriteNumber < PaddingBytes )
-   {
-    ebmpBYTE TempBYTE;
-    fwrite( (char*) &TempBYTE , 1, 1, fp);
-    WriteNumber++;
-   }
-  }
- }
-
- if( BitDepth == 1 && 1 == 0 )
- {
-  int DataBytes = (int) ceil( Width / 8.0 );
-  int PaddingBytes = ( 4 - DataBytes % 4 ) % 4;
- 
-  for( j = Height-1 ; j >= 0 ; j-- )
-  {
-   // write all row pixel data
-   i=0;
-   int WriteNumber = 0;
-   while( WriteNumber < DataBytes )
-   {
-    int Index1 = 0;
-    int Index2 = 0;
-    int Index3 = 0;
-    int Index4 = 0;
-    int Index5 = 0;
-    int Index6 = 0;
-    int Index7 = 0;
-    int Index8 = 0;
-	
-    int k;
-    int BestDistance;	
-    if( i < Width )
-    {
-     k=0;
-     BestDistance = 999999;	
-     // choose a best index.
-     while( k < 2 )
-     {
-      int TempDistance = IntSquare( (int) Pixels[i][j].Red - (int) Colors[k].Red )
-                       + IntSquare( (int) Pixels[i][j].Green - (int) Colors[k].Green )
-                       + IntSquare( (int) Pixels[i][j].Blue - (int) Colors[k].Blue );
-      if( TempDistance < BestDistance )
-      {
-       BestDistance = TempDistance;
-       Index1 = k;
-      }	  
-      k++;
-     }
-     i++;	
-    }
-              
-    if( i < Width )
-    {
-     k=0;
-     BestDistance = 999999;	
-     // choose a best index.
-     while( k < 2 )
-     {
-      int TempDistance = IntSquare( (int) Pixels[i][j].Red - (int) Colors[k].Red )
-                       + IntSquare( (int) Pixels[i][j].Green - (int) Colors[k].Green )
-                       + IntSquare( (int) Pixels[i][j].Blue - (int) Colors[k].Blue );
-      if( TempDistance < BestDistance )
-      {
-       BestDistance = TempDistance;
-       Index2 = k;
-      }	  
-      k++;
-     }
-     i++;	
-    }
-       	
-    if( i < Width )
-    {
-     k=0;
-     BestDistance = 999999;	
-     // choose a best index.
-     while( k < 2 )
-     {
-      int TempDistance = IntSquare( (int) Pixels[i][j].Red - (int) Colors[k].Red )
-                       + IntSquare( (int) Pixels[i][j].Green - (int) Colors[k].Green )
-                       + IntSquare( (int) Pixels[i][j].Blue - (int) Colors[k].Blue );
-      if( TempDistance < BestDistance )
-      {
-       BestDistance = TempDistance;
-       Index3 = k;
-      }	  
-      k++;
-     }
-     i++;	
-    }
-          	
-    if( i < Width )
-    {
-     k=0;
-     BestDistance = 999999;	
-     // choose a best index.
-     while( k < 2 )
-     {
-      int TempDistance = IntSquare( (int) Pixels[i][j].Red - (int) Colors[k].Red )
-                       + IntSquare( (int) Pixels[i][j].Green - (int) Colors[k].Green )
-                       + IntSquare( (int) Pixels[i][j].Blue - (int) Colors[k].Blue );
-      if( TempDistance < BestDistance )
-      {
-       BestDistance = TempDistance;
-       Index4 = k;
-      }	  
-      k++;
-     }
-     i++;	
-    }
-           
-    if( i < Width )
-    {
-     k=0;
-     BestDistance = 999999;	
-     // choose a best index.
-     while( k < 2 )
-     {
-      int TempDistance = IntSquare( (int) Pixels[i][j].Red - (int) Colors[k].Red )
-                       + IntSquare( (int) Pixels[i][j].Green - (int) Colors[k].Green )
-                       + IntSquare( (int) Pixels[i][j].Blue - (int) Colors[k].Blue );
-      if( TempDistance < BestDistance )
-      {
-       BestDistance = TempDistance;
-       Index5 = k;
-      }	  
-      k++;
-     }
-     i++;	
-    }
-         	
-    if( i < Width )
-    {
-     k=0;
-     BestDistance = 999999;	
-     // choose a best index.
-     while( k < 2 )
-     {
-      int TempDistance = IntSquare( (int) Pixels[i][j].Red - (int) Colors[k].Red )
-                       + IntSquare( (int) Pixels[i][j].Green - (int) Colors[k].Green )
-                       + IntSquare( (int) Pixels[i][j].Blue - (int) Colors[k].Blue );
-      if( TempDistance < BestDistance )
-      {
-       BestDistance = TempDistance;
-       Index6 = k;
-      }	  
-      k++;
-     }
-     i++;	
-    }
-        	
-    if( i < Width )
-    {
-     k=0;
-     BestDistance = 999999;	
-     // choose a best index.
-     while( k < 2 )
-     {
-      int TempDistance = IntSquare( (int) Pixels[i][j].Red - (int) Colors[k].Red )
-                       + IntSquare( (int) Pixels[i][j].Green - (int) Colors[k].Green )
-                       + IntSquare( (int) Pixels[i][j].Blue - (int) Colors[k].Blue );
-      if( TempDistance < BestDistance )
-      {
-       BestDistance = TempDistance;
-       Index7 = k;
-      }	  
-      k++;
-     }
-     i++;	
-    }
-        
-    if( i < Width )
-    {
-     k=0;
-     BestDistance = 999999;	
-     // choose a best index.
-     while( k < 2 )
-     {
-      int TempDistance = IntSquare( (int) Pixels[i][j].Red - (int) Colors[k].Red )
-                       + IntSquare( (int) Pixels[i][j].Green - (int) Colors[k].Green )
-                       + IntSquare( (int) Pixels[i][j].Blue - (int) Colors[k].Blue );
-      if( TempDistance < BestDistance )
-      {
-       BestDistance = TempDistance;
-       Index8 = k;
-      }	  
-      k++;
-     }
-     i++;	
-    }
-        
-    ebmpBYTE RawBYTE = (ebmpBYTE) ( Index8    + Index7*2  + Index6*4  + Index5*8
-                           +Index4*16 + Index3*32 + Index2*64 + Index1*128 );
-    fwrite( (char*) &RawBYTE , 1, 1, fp);
-    WriteNumber++;
-   }
-   // read any necessary row padding
-   WriteNumber = 0;
-   while( WriteNumber < PaddingBytes )
-   {
-    ebmpBYTE TempBYTE;
-    fwrite( (char*) &TempBYTE , 1, 1, fp);
-    WriteNumber++;
-   }
-  }
  }
 
  fclose(fp);
@@ -967,16 +708,33 @@ bool BMP::ReadFromFile( const char* FileName )
   // determine the number of colors specified in the 
   // color table
   
-  int NumberOfColors = ((int) bmfh.bfOffBits - 54 )/4;  
-  if( NumberOfColors > IntPow(2,BitDepth) )
-  { NumberOfColors = IntPow(2,BitDepth); }
+  int NumberOfColorsToRead = ((int) bmfh.bfOffBits - 54 )/4;  
+  if( NumberOfColorsToRead > IntPow(2,BitDepth) )
+  { NumberOfColorsToRead = IntPow(2,BitDepth); }
  
-  Colors = new RGBApixel [NumberOfColors];
+  if( NumberOfColorsToRead < TellNumberOfColors() )
+  {
+   cout << "EasyBMP Warning: file " << FileName << " has an underspecified" << endl
+        << "                 color table. The table will be padded with extra" << endl
+		<< "                 white (255,255,255,0) entries." << endl;
+  }
+ 
   int n;
-  for( n=0; n < NumberOfColors ; n++ )
+  for( n=0; n < NumberOfColorsToRead ; n++ )
   {
    SafeFread( (char*) &(Colors[n]) , 4 , 1 , fp);     
   }
+  for( n=NumberOfColorsToRead ; n < TellNumberOfColors() ; n++ )
+  {
+   RGBApixel WHITE; 
+   WHITE.Red = 255;
+   WHITE.Green = 255;
+   WHITE.Blue = 255;
+   WHITE.Alpha = 0;
+   SetColor( n , WHITE );
+  }
+  
+  
  }
  
  // skip blank data if bfOffBits so indicates

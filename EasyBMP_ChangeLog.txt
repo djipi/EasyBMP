@@ -689,3 +689,38 @@ Version: 1.02
    _EasyBMP_Version_Integer_ (an integer version, e.g., 102).
 
 *--------------------------------------------------------------------*
+
+Version: 1.03
+   Date: 06-20-2006
+
+   Inserted a line into EasyBMP.h to suppress the Visual Studio 
+   
+   Added a check to BMP.SetColor() to ensure that the color table 
+   is defined before attempting to set a color entry. 
+
+   Added a check to BMP.GetColor() to ensure that the color table 
+   is defined before attempting to retrieve a color entry. 
+   
+   Simplified the conditional in BMP.WriteToFile() from  
+   if( BitDepth == 1 || BitDepth == 4 || ... ) to the simpler 
+   if( BitDepth != 16 ).
+   
+   Removed the old, unused code for writing 1- and 4-bit files 
+   from BMP.WriteToFile().
+   
+   Removed the line Colors = new RGBApixel [NumberOfColors]; in 
+   BMP.ReadFromFile(). This operation is already covered by the 
+   earlier SetBitDepth() call, and may contribute to a memory 
+   leak. Furthermore, for files that had fewer than expected 
+   number of colors (e.g., an 8-bit file with 236 colors), it 
+   lead to memory access errors in BMP.GetColor() and BMP.SetColor(). 
+   (In fact, this is the main motivation for release 1.03.) 
+   
+   Added a warning when BMP.ReadFromFile() encounters an under-
+   specified color table, and code to pad the table with white 
+   entries. 
+   
+   Added screen output on EasyBMP version and project website to 
+   the code sample.
+   
+*--------------------------------------------------------------------*

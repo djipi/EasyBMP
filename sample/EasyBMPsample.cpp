@@ -8,8 +8,8 @@
 *                                                *
 *          file: EasyBMPsample.cpp               * 
 *    date added: 03-31-2006                      *
-* date modified: 05-29-2006                      *
-*       version: 1.02                            *
+* date modified: 06-20-2006                      *
+*       version: 1.03                            *
 *                                                *
 *   License: BSD (revised/modified)              *
 * Copyright: 2005-6 by the EasyBMP Project       * 
@@ -24,6 +24,11 @@ using namespace std;
 
 int main( int argc, char* argv[] )
 {
+ cout << endl
+      << "Using EasyBMP Version " << _EasyBMP_Version_ << endl << endl
+      << "Copyright (c) by the EasyBMP Project 2005-6" << endl
+      << "WWW: http://easybmp.sourceforge.net" << endl << endl;
+
  BMP Text;
  Text.ReadFromFile("EasyBMPtext.bmp");
  

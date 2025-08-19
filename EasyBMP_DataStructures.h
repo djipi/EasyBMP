@@ -8,8 +8,8 @@
 *                                                *
 *          file: EasyBMP_DataStructures.h        *
 *    date added: 05-02-2005                      *
-* date modified: 05-29-2006                      *
-*       version: 1.02                            *
+* date modified: 06-20-2006                      *
+*       version: 1.03                            *
 *                                                *
 *   License: BSD (revised/modified)              *
 * Copyright: 2005-6 by the EasyBMP Project       * 
@@ -63,19 +63,19 @@ inline ebmpDWORD FlipDWORD( ebmpDWORD in )
 // in memory
 
 typedef struct RGBApixel {
-	ebmpBYTE	Blue;
-	ebmpBYTE	Green;
-	ebmpBYTE	Red;
-	ebmpBYTE	Alpha;
+	ebmpBYTE Blue;
+	ebmpBYTE Green;
+	ebmpBYTE Red;
+	ebmpBYTE Alpha;
 } RGBApixel; 
 
 class BMFH{
 public:
- ebmpWORD	bfType;
- ebmpDWORD	bfSize;
- ebmpWORD	bfReserved1;
- ebmpWORD	bfReserved2;
- ebmpDWORD	bfOffBits; 
+ ebmpWORD  bfType;
+ ebmpDWORD bfSize;
+ ebmpWORD  bfReserved1;
+ ebmpWORD  bfReserved2;
+ ebmpDWORD bfOffBits; 
 
  BMFH();
  void display( void );
@@ -87,8 +87,8 @@ public:
  ebmpDWORD biSize;
  ebmpDWORD biWidth;
  ebmpDWORD biHeight;
- ebmpWORD biPlanes;
- ebmpWORD biBitCount;
+ ebmpWORD  biPlanes;
+ ebmpWORD  biBitCount;
  ebmpDWORD biCompression;
  ebmpDWORD biSizeImage;
  ebmpDWORD biXPelsPerMeter;
