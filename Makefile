@@ -49,9 +49,9 @@ uninstall:
 install: $(BUILD_DIR)/EasyBMP.a pkgconfig 
 	@echo -e "\033[01;33m***\033[00;32m Installing the library...\033[00m"
 	install -d $(DESTDIR)$(PREFIX)/lib/
-	install -m 751 $(BUILD_DIR)/EasyBMP.a $(DESTDIR)$(PREFIX)/lib/libEasyBMP.a
+	install -m 644 $(BUILD_DIR)/EasyBMP.a $(DESTDIR)$(PREFIX)/lib/libEasyBMP.a
 	install -d $(DESTDIR)$(PREFIX)/include/EasyBMP/
-	install -m 751 EasyBMP.h $(DESTDIR)$(PREFIX)/include/EasyBMP/
-	install -m 751 EasyBMP_DataStructures.h $(DESTDIR)$(PREFIX)/include/EasyBMP/
-	install -m 751 EasyBMP_BMP.h $(DESTDIR)$(PREFIX)/include/EasyBMP/
-	install -m 751 EasyBMP_VariousBMPutilities.h $(DESTDIR)$(PREFIX)/include/EasyBMP/
+	install -m 644 EasyBMP.h $(DESTDIR)$(PREFIX)/include/EasyBMP/
+	install -m 644 EasyBMP_DataStructures.h $(DESTDIR)$(PREFIX)/include/EasyBMP/
+	install -m 644 EasyBMP_BMP.h $(DESTDIR)$(PREFIX)/include/EasyBMP/
+	install -m 644 EasyBMP_VariousBMPutilities.h $(DESTDIR)$(PREFIX)/include/EasyBMP/
