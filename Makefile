@@ -14,11 +14,14 @@ BUILD_DIR = build
 
 all: $(BUILD_DIR)/EasyBMP.a
 
+$(BUILD_DIR):
+	@mkdir -p $(BUILD_DIR)
+
 $(BUILD_DIR)/EasyBMP.a: $(BUILD_DIR)/EasyBMP.o
 	@echo -e "\033[01;33m***\033[00;32m Building the library...\033[00m"
 	@ar -r $@ $<
 	
-$(BUILD_DIR)/EasyBMP.o: EasyBMP.cpp
+$(BUILD_DIR)/EasyBMP.o: EasyBMP.cpp | $(BUILD_DIR)
 	@echo -e "\033[01;33m***\033[00;32m Compiling $<...\033[00m"
 	@gcc -Ofast -Wall -c -o $@ $<
 
