@@ -1,0 +1,71 @@
+EasyBMP installation and build instructions
+===========================================
+
+Requirements
+------------
+
+The standard library build requires GNU Make, GCC with its C++ compiler
+support, and GNU binutils (for `ar`). The sample program uses GNU Make and
+G++.
+
+Building the library
+--------------------
+
+From the repository root, run:
+
+    make
+
+This builds the static library at `build/EasyBMP.a`. To remove the build
+outputs, run `make clean`.
+
+Installing the library
+----------------------
+
+By default, `make install` installs the library, headers, and an EasyBMP
+pkg-config file under `/usr/local`. Use an install prefix you can write to,
+or run with the permissions needed for the chosen prefix:
+
+    make PREFIX="$HOME/.local" install
+
+The library is installed to `PREFIX/lib`, headers to `PREFIX/include/EasyBMP`,
+and the pkg-config file to `PREFIX/lib/pkgconfig`. To uninstall from the
+same prefix, run:
+
+    make PREFIX="$HOME/.local" uninstall
+
+When using a custom prefix, add `PREFIX/lib/pkgconfig` to `PKG_CONFIG_PATH`
+if you want pkg-config to find EasyBMP.
+
+Building the sample
+-------------------
+
+The sample program and its Makefile are in `sample/`. Build it from the
+repository root with:
+
+    make -C sample
+
+This creates `sample/EasyBMPtest`. Run it from that directory:
+
+    cd sample
+    ./EasyBMPtest
+
+The sample writes output BMP images in the sample directory. Remove the
+sample build and generated output files with `make -C sample clean`.
+
+Building the documentation
+--------------------------
+
+The user manual sources and Makefile are in `docs/`. Building the manual
+requires LaTeX (`latex`) and `dvipdfm`. From the repository root, run:
+
+    make -C docs
+
+This builds `docs/EasyBMP_UserManual.pdf` and its DVI intermediate. See
+`docs/EasyBMP_UserManual.tex` for the manual source.
+
+Visual Studio
+-------------
+
+The repository also includes the Visual Studio solution
+`EasyBMP.sln` and project files under `vstudio/` for building with Visual
+Studio.
