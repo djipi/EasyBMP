@@ -11,3 +11,6 @@ Add dedicated files for the Git's repository
 CMake<br>
 Make<br>
 Visual Studio 2026
+
+## Disclaimer
+CMakeLists and INSTALL files have been made with Github Copilot
