@@ -2,6 +2,11 @@
 
 EasyBMP is a simple, cross-platform, open source (revised BSD) C++ library designed for easily reading, writing, and modifying Windows bitmap (BMP) image files.
 
+## Improvements
+Create INSTALL, README, and the LICENSE file from BSD_(revised)_license.txt<br>
+Add projects<br>
+Add dedicated files for the Git's repository
+
 ## Projects
 Make<br>
 Visual Studio 2026
