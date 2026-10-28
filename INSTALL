@@ -4,9 +4,9 @@ EasyBMP installation and build instructions
 Requirements
 ------------
 
-The standard library build requires GNU Make, GCC with its C++ compiler
-support, and GNU binutils (for `ar`). The sample program uses GNU Make and
-G++.
+The Make build requires GNU Make, GCC with its C++ compiler support, and GNU
+binutils (for `ar`). The CMake build requires CMake 3.14 or newer and a C++
+compiler. The sample program uses GNU Make and G++.
 
 Building the library
 --------------------
@@ -35,6 +35,27 @@ same prefix, run:
 
 When using a custom prefix, add `PREFIX/lib/pkgconfig` to `PKG_CONFIG_PATH`
 if you want pkg-config to find EasyBMP.
+
+Building and installing with CMake
+----------------------------------
+
+From the repository root, configure and build the library with:
+
+    cmake -S . -B build-cmake -DCMAKE_INSTALL_PREFIX="$HOME/.local"
+    cmake --build build-cmake
+
+Install the library, headers, CMake package files, and pkg-config file with:
+
+    cmake --install build-cmake
+
+The install directories are printed during configuration. To uninstall the
+files listed in CMake's install manifest, run:
+
+    cmake --build build-cmake --target uninstall
+
+The CMake package can be used with `find_package(EasyBMP CONFIG REQUIRED)` and
+the `EasyBMP::EasyBMP` target. When using a custom prefix, add its
+`lib/pkgconfig` directory to `PKG_CONFIG_PATH` to find the pkg-config file.
 
 Building the sample
 -------------------
