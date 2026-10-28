@@ -9,4 +9,5 @@ Add dedicated files for the Git's repository
 
 ## Projects
 Make<br>
+CMake<br>
 Visual Studio 2026
