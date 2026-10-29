@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.14)
 
 project(EasyBMP VERSION 1.06 LANGUAGES CXX)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+
 include(GNUInstallDirs)
 include(CMakePackageConfigHelpers)
 
@@ -10,8 +14,12 @@ set(EASYBMP_INSTALL_INCLUDEDIR "${CMAKE_INSTALL_INCLUDEDIR}/EasyBMP")
 set(EASYBMP_INSTALL_CMAKEDIR "${CMAKE_INSTALL_LIBDIR}/cmake/EasyBMP")
 set(EASYBMP_INSTALL_PKGCONFIGDIR "${CMAKE_INSTALL_LIBDIR}/pkgconfig")
 
-add_library(EasyBMP EasyBMP.cpp)
+add_library(EasyBMP STATIC EasyBMP.cpp)
 add_library(EasyBMP::EasyBMP ALIAS EasyBMP)
+
+if(MSVC)
+    set_target_properties(EasyBMP PROPERTIES DEBUG_POSTFIX d)
+endif()
 
 target_include_directories(EasyBMP PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
