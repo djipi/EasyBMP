@@ -65,6 +65,12 @@ install(FILES
     DESTINATION "${EASYBMP_INSTALL_CMAKEDIR}"
 )
 
+if(UNIX)
+    set(EASYBMP_PRIVATE_LIBS "-lm")
+else()
+	set(EASYBMP_PRIVATE_LIBS "")
+endif()
+
 configure_file(cmake/EasyBMP.pc.in EasyBMP.pc @ONLY)
 install(FILES "${CMAKE_CURRENT_BINARY_DIR}/EasyBMP.pc"
     DESTINATION "${EASYBMP_INSTALL_PKGCONFIGDIR}"

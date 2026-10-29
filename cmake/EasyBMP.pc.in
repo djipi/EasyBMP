@@ -7,4 +7,5 @@ Name: EasyBMP
 Description: EasyBMP image library
 Version: @EASYBMP_VERSION@
 Libs: -L${libdir} -lEasyBMP
+Libs.private: @EASYBMP_PRIVATE_LIBS@
 Cflags: -I${includedir}
