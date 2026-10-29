@@ -1,7 +1,7 @@
 prefix=${pcfiledir}/../..
 exec_prefix=${prefix}
 libdir=${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
-includedir=${prefix}/@EASYBMP_INSTALL_INCLUDEDIR@
+includedir=${prefix}/include
 
 Name: EasyBMP
 Description: EasyBMP image library

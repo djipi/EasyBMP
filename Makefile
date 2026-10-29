@@ -35,7 +35,7 @@ pkgconfig:
 	@echo "prefix=$(PREFIX)" > $(PC_FILE)
 	@echo "exec_prefix=\$${prefix}" >> $(PC_FILE)
 	@echo "libdir=\$${exec_prefix}/lib" >> $(PC_FILE)
-	@echo "includedir=\$${prefix}/include/EasyBMP" >> $(PC_FILE)
+	@echo "includedir=\$${prefix}/include" >> $(PC_FILE)
 	@echo "" >> $(PC_FILE)
 	@echo "Name: EasyBMP" >> $(PC_FILE)
 	@echo "Description: EasyBMP image library" >> $(PC_FILE)
