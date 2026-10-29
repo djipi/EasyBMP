@@ -41,6 +41,7 @@ pkgconfig:
 	@echo "Description: EasyBMP image library" >> $(PC_FILE)
 	@echo "Version: 1.06" >> $(PC_FILE)
 	@echo "Libs: -L\$${libdir} -lEasyBMP" >> $(PC_FILE)
+	@echo "Libs.private: -lm" >> $(PC_FILE)
 	@echo "Cflags: -I\$${includedir}" >> $(PC_FILE)
 
 uninstall:
